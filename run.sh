@@ -54,9 +54,8 @@ echo "Starting Docker Compose services..."
 docker compose -f "$COMPOSE_FILE" up -d --build
 
 echo "Waiting for services to become ready..."
-until docker compose -f "$COMPOSE_FILE" ps --format json | grep -q '"Health": *"healthy"' || \
-      curl -s "$BASE_URL/health" > /dev/null 2>&1; do
-  echo "Waiting for services to be healthy..."
+until curl -s -f "$BASE_URL/health" > /dev/null 2>&1; do
+  echo "Waiting for service to be healthy at $BASE_URL/health..."
   sleep 2
 done
 
