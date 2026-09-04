@@ -38,15 +38,19 @@ services:
       timeout: 3s
       retries: 10
 
-  # your-service:
-  #   build: ./service
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     operator:
-  #       condition: service_healthy
-  #     postgres:
-  #       condition: service_healthy
+  service:
+    build: ./service
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://vend:vend@postgres:5432/vend
+      OPERATOR_URL: http://operator:9000
+      OPERATOR_API_KEY: sk_test_operator_7f3a9c1e
+    depends_on:
+      operator:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
 
 volumes:
   operator-data:
